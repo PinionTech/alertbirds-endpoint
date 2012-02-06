@@ -70,15 +70,21 @@ app.post('/', function(req,res) {
 	res.send(200);
 	email.send(emailConfig, function(err,result) {
 		if (err) {
+			redFlag = true;
 			logger.error(err + req.body);
 		} else {
+			redFlag = false;
 			logger.info('Alert sent. id: ' + req.body.id);
 		}
 	});
 });
 
 app.get('/health', function(req,res) {
-	res.send(200);
+	if ( redFlag === true ) {
+		res.send(503);
+	} else {
+		res.send(200);
+	}
 });
 
 app.listen(3000);
