@@ -14,6 +14,8 @@ Loggly makes log aggregation super simple. Everything at [Pinion](http://pinion.
 
 Clone this repository, configure it, and point your Alert Birds at it.
 
+alertbirds-endpoint runs against both node v0.4.x and v0.6.x
+
 ## Configuration
 
 Everything lives in conf/conf.js
