@@ -1,4 +1,4 @@
-./conf/conf.js
+conf/conf.js
 alertbirds.log
 exceptions.log
-./node_modules
+node_modules
