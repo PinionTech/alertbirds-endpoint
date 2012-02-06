@@ -1,0 +1,24 @@
+var config = {}
+
+config.email = {
+	// Where do you want your alerts to go?
+	to: 'servers@example.com',
+	// Configure your SMTP server
+	username: 'username@example.com',
+	password: 'password',
+	domain: 'example.com',
+	from: 'someone@example.com',
+	// These are the default settings for gmail.
+	host: 'smtp.gmail.com',
+	port: '465',
+	ssl: true,
+	authentication: 'login'
+};
+
+config.loggly = {
+	subdomain: 'example',
+	inputToken: 'token',
+	handleExceptions: true
+};
+
+module.exports = config;

@@ -1,0 +1,10 @@
+{
+    "name": "Alert Birds Endpoint"
+  , "version": "0.0.1"
+  , "private": true
+  , "dependencies": {
+      "express": "2.5.5"
+    , "mailer": "0.6.7"
+    , "winston": "0.5.9"
+  }
+}
