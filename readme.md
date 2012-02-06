@@ -12,7 +12,10 @@ Loggly makes log aggregation super simple. Everything at [Pinion](http://pinion.
 
 ## Installation
 
-Clone this repository, configure it, and point your Alert Birds at it.
+1. Clone this repository
+2. Run npm install to install the dependencies
+3. Complete conf/conf.js
+4. Point your Alert Birds at it.
 
 alertbirds-endpoint also exposes /health which responds with 200 or 503, depending on how healthy it's feeling. This designed to point a third party monitoring service at. Someone must watch the watcher.
 
