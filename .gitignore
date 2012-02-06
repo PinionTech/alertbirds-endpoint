@@ -2,3 +2,4 @@ conf/conf.js
 alertbirds.log
 exceptions.log
 node_modules
+*.swp
