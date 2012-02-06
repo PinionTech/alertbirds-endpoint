@@ -40,12 +40,12 @@ app.configure(function(){
 
 var redFlag = false;
 
+var queue = [];
+
 app.post('/', function(req,res) {
-	console.log(req.body);
 	var emailConfig = config.email
 	var subject = '';
 	var time = new Date(req.body.last_state_change * 1000);
-	console.log(time);
 	switch(req.body.event) {
 		case 'trigger':
 			subject = 'Alert triggered: ';
@@ -59,7 +59,7 @@ app.post('/', function(req,res) {
 	subject += req.body.description;
 	emailConfig.subject = subject;
 	emailConfig.template = 'alert.txt';
-	emailConfig.data = {
+	var alertData = {
 		id: req.body.id,
 		description: req.body.description,
 		event: req.body.event,
@@ -67,11 +67,13 @@ app.post('/', function(req,res) {
 		timeString: time.toString(),
 		threshold: req.body.threshold
 	};
+	emailConfig.data = alertData;
 	res.send(200);
 	email.send(emailConfig, function(err,result) {
 		if (err) {
 			redFlag = true;
-			logger.error(err + req.body);
+			logger.error(req.body);
+			queue.push(alertData);
 		} else {
 			redFlag = false;
 			logger.info('Alert sent. id: ' + req.body.id);
@@ -87,5 +89,30 @@ app.get('/health', function(req,res) {
 	}
 });
 
+setInterval( function() {
+	for ( var i = 0 ; i < queue.length ; i++ ) {
+		var item = queue.shift();
+		iterateQueue(item);
+	}
+}, 1 * 60 * 1000);
+
+function iterateQueue(item) {
+	var emailConfig = config.email;
+	emailConfig.subject = 'DELAYED ALERT - ' + item.event + ' ' + item.description;
+	emailConfig.template = 'alert.txt';
+	emailConfig.data = item;
+	email.send(emailConfig, function(err, result) {
+		if (err) {
+			redFlag = true;
+			logger.error('Delayed email send error. id: ' + item.id);
+			queue.push(item);
+		} else {
+			redFlag = false;
+			logger.info('Delayed alert sent. id: ' + item.id);
+		}
+	});
+};
+
+
 app.listen(3000);
-console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+logger.info("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
